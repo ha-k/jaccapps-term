@@ -1,0 +1,132 @@
+<html>
+<head>
+<title>Term Parser Example</title>
+<style>
+<!--
+.FLUSHRIGHT { text-align: right }
+TT          { color: maroon }
+PRE         { color: maroon }
+-->
+</style>
+</head>
+
+<body bgcolor="#FFFFBB">
+
+<h2>Term Parser Example</h2>
+
+This demonstrates the capabilities of dynamic operators.
+
+
+<p><hr></p>
+
+The <a href="Term.html">term grammar</a> specifies as a simple
+interactive system for reading and printing algebraic terms.  The parser
+repeatedly reads a term folowed by a dot (<tt>'.'</tt>) from the
+standard input, and prints its canonical form - <i>i.e.</i>,
+<tt>f(t<sub>1</sub>, ... ,t<sub>n</sub>)</tt>.  One types the command
+<tt>exit.</tt> to exit the system. Prolog's dynamic operators are
+predefined, but - as in Prolog - may be redefined at parse time. Still
+as in Prolog, new dynamic operators may also be defined and redefined at
+parse time as well.
+
+<p>
+
+We define a simple <a href="TermTokenizer.html">tokenizer</a> and a <a
+href="TermMain.html">driver</a> for our needs, and run <tt>Jacc</tt>
+on the term grammar:
+<pre>
+% <font color=green>jacc Term</font>
+*** Reading grammar in file Term.grm ... 
+*** Starting grammar analysis ... 
+*** Grammar analysis completed in 70 ms.
+*** Building parsing tables ... 
+*** Writing parser file TermParser.java
+*** Parser generation completed in 100 ms.
+*** Total processing time: 271 ms.
+</pre>
+
+This generates the <a href="TermParser.html">term parser</a>.
+We then compile all the relevant java files:
+<pre>
+% <font color=green>javac Term*.java</font>
+</pre>
+and run the Term reader:
+<pre>
+% <font color=green>java TermMain</font>
+*** Welcome to the dynamic operator Term Parser!
+*** Version of Mon Dec 20 18:49:39 PST 2004
+> a+b*c-d.
+-(+(a,*(b,c)),d)
+</pre>
+
+The system read in the algebraic term "<tt>a+b*c-d</tt>" and printed it
+in its canonical form. With the canonical form, we can verify the effect
+of operator  precedence and associativity. For example, the operator
+<tt>+</tt> was declared in the grammar to be left associative:
+<pre>
+> a+b+c.
++(+(a,b),c)
+</pre>
+
+We can change an operator's specification dynamically.  Indeed, the term
+grammar defines a semantic action so that the parser interprets a term
+of the form "<tt>op(P,F,O)</tt>" to (re-)define the operator <tt>O</tt>
+to have precedence level <tt>P</tt>, and fixity <tt>F</tt>. We can use
+this to make the operator <tt>+</tt> become <i>right</i>-associative.
+To wit:
+<pre>
+> op(500,xfy,+).
+op(500,xfy,+)
+> a+b+c.
++(a,+(b,c))
+</pre>
+
+We can also define fresh operators. For example, <tt>$</tt> is not known
+as an operator. Indeed:
+<pre>
+> a $ b.
+*** Syntax Error: unexpected 'FUNCTOR'($) - see stdin (line 5, column 3)
+</pre>
+
+But now, let us define it on the fly as a binary left associative operator:
+<pre>
+> op(400,yfx,$).
+op(400,yfx,$)
+</pre>
+and verify that it is now indeed understood to be so:
+<pre>
+> a $ b $ c.
+$($(a,b),c)
+</pre>
+Finally, we can also verify the behavior of the <tt>if...then...else</tt>
+construct as an algebraic term:
+<pre>
+> if a then b else c.
+then(if(a),else(b,c))
+> if a&lt;b then x+y else (if a = b then 1 else 0).
+then(if(&lt;(a,b)),else(+(x,y),then(if(=(a,b)),else(1,0))))
+> exit.
+*** Bye bye...
+%
+</pre>
+
+<p><hr><p>
+
+<DL>
+<DT><STRONG>Author:</STRONG>
+<DD><a href="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</a>
+<DT><STRONG>Copyright:</STRONG>
+<DD>&copy; 2012 - present <a href="http://www.hassan-ait-kaci.net/">HLT</a>
+<DT><STRONG>Version:</STRONG>
+<DD>Last modified on Tue Apr 17 21:34:09 2012 by hak
+</DL>
+
+</FONT></TD></TR>
+</TABLE>
+<P>
+   
+<p><hr><p>
+
+</body>
+
+</html>

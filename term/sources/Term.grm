@@ -1,0 +1,307 @@
+// FILE. . . . . /home/hak/hlt/src/hlt/language/jaccapps/term/sources/Term.grm
+// EDIT BY . . . Hassan Ait-Kaci
+// ON MACHINE. . Hp-Dv7
+// STARTED ON. . Sun Oct 14 23:53:44 2012
+
+/**
+ * This example is a Jacc specification of an interactive parser for
+ * Prolog terms (and thus for Prolog but without the <tt>[H|T]</tt> and
+ * <tt>[a, b, ...]</tt> notation for lists). Here are the <a
+ * href="index.html">source files</a>. This illustrates the use of <a
+ * href="../../../../../../../doc/hlt/jaccdoc/dynamicLR.html">dynamic
+ * operators</a> and how to specify top-down undo semantic actions. The
+ * parser repeatedly reads a term from the standard input, prints its
+ * canonical form - <i>i.e.</i>, <tt>f(t<sub>1</sub>,
+ * ... ,t<sub>n</sub>)</tt>. All Prolog dynamic operators are
+ * predefined, but may be redefined at parse time. New dynamic operators
+ * may also be defined and redefined at parse time as well.
+ *
+ * <p>
+ *
+ * @version     Last modified on Tue Jan 29 10:48:35 2013 by hak
+ * @author      <a href="mahlto:hak@acm.org">Hassan A&iuml;t-Kaci</a>
+ * @copyright   &copy; <a href="http://www.hassan-ait-kaci.net/">by the author</a>
+ */
+
+/*
+ * Declarations
+ */
+
+%import java.util.*;
+%start Session
+
+%token NUMBER FUNCTOR
+
+%dynamic Op     // Prolog operator category
+%Op ':-'   1200 xfx
+%Op ':-'   1200 fx
+%Op '-->'  1200 xfx
+%Op ';'    1100 xfy
+%Op ','    1000 xfy
+%Op '='    700 xfx
+%Op '\\='  700 xfx
+%Op '=='   700 xfx
+%Op '\\==' 700 xfx
+%Op '=..'  700 xfx
+%Op 'is'   700 xfx
+%Op '=:='  700 xfx
+%Op '=\\=' 700 xfx
+%Op '<'    700 xfx
+%Op '<='   700 xfx
+%Op '>'    700 xfx
+%Op '>='   700 xfx
+%Op '+'    500 yfx
+%Op '-'    500 yfx
+%Op '*'    400 yfx
+%Op '/'    400 yfx
+%Op '&'    200 xfy
+%Op '^'    200 xfy
+%Op '-'    200 fy
+// we add, with lesser precedence than relational operators's (700):
+%Op if   800 fx       // if X                  ==> if(X)
+%Op then 850 xfy      // X then Y              ==> then(X,Y)
+%Op else 820 xfx      // X else Y              ==> else(X,Y)
+         // THEREFORE // if C then T else E    ==> then(if(C),else(T,E))
+
+         // Note that // if A then B         ==> then(if(A),B).
+         // However   // if A then B else if C then D else E.
+         // parses as //    ==> then(if(A),then(else(B,if(C)),else(D,E)))
+         // instead of//    ==> then(if(A),else(B,then(if(C),else(D,E))))
+         // which is  // if A then B else (if C then D else E).
+
+%{
+  Stack terms = new Stack();
+  Term term, temp;
+%}
+
+%%
+/*
+ * Production rules
+ */
+
+Session
+        : Clauses Exit
+        | Exit
+        ;
+
+Exit
+  	: 'exit'
+        {
+	  System.out.println("*** Bye bye!...");
+	  System.exit(0);
+	} '.'
+	;
+
+Clauses
+        : Clause
+        | Clauses Clause
+        ;
+
+Clause
+        :
+        { /* Bottom-up reduction semantic action: */
+          terms = new Stack();
+        }
+          Term
+        { /* Bottom-up reduction semantic action: */
+          term = (Term)terms.pop();
+
+          // Operator (re)definition:
+          if (term.functor != null && term.functor.equals("op")
+              && term.body != null && term.body.size() == 3)
+            {
+              try
+                {
+                  Op(((Term)term.body.get(2)).functor,
+                     ((Term)term.body.get(1)).functor,
+                     (int)((Term)term.body.get(0)).number);
+                }
+              catch (Exception e)
+                {
+                  System.err.println("*** Bad op declaration: "+term);
+                }
+            }
+
+          out.println(term.toString()); // print out the term's canonical form
+          cutAll();                     // delete all pending token choices
+          TermTokenizer.prompt();
+        } '.'
+        | error
+	{
+	  errorManager().reportErrors(true);
+          TermTokenizer.prompt();
+	} '.'
+	;
+
+Op      : FUNCTOR
+        ;
+
+Term
+        : NUMBER
+        { /* Bottom-up reduction semantic action: */
+          terms.push($1.isInteger() ? new Term((int)$1.nvalue())
+                                  : new Term($1.nvalue()));
+        }
+        { /* Top-down undo semantic action: */
+          terms.pop();
+        }
+        | Op
+        { /* Bottom-up reduction semantic action: */
+          terms.push(new Term($1.svalue()));
+        }
+        { /* Top-down undo semantic action: */
+          terms.pop();
+        }
+        | Op '('
+        { /* Bottom-up reduction semantic action: */
+          terms.push(new Term($1.svalue(),new Vector()));
+        }
+        { /* Top-down undo semantic action: */
+          terms.pop();
+        }
+          Body ')'
+        | OP_
+        { /* Bottom-up reduction semantic action: */
+          terms.push(new Term($1.svalue(),new Vector()));
+        }
+        { /* Top-down undo semantic action: */
+          terms.pop();
+        }
+          Term
+        { /* Bottom-up reduction semantic action: */
+          term = (Term)terms.pop();
+          ((Term)terms.peek()).body.add(term);
+        }
+        { /* Top-down undo semantic action: */
+          temp = (Term)terms.peek();
+          term = (Term)temp.body.lastElement();
+          temp.body.removeElementAt(temp.body.size()-1);
+          terms.push(term);
+        }
+        | Term _OP_
+        { /* Bottom-up reduction semantic action: */
+          term = (Term)terms.pop();
+          terms.push(new Term($2.svalue(),new Vector()));
+          ((Term)terms.peek()).body.add(term);
+        }
+        { /* Top-down undo semantic action: */
+          temp = (Term)terms.pop();
+          term = (Term)temp.body.lastElement();
+          terms.push(term);
+        }
+          Term
+        { /* Bottom-up reduction semantic action: */
+          term = (Term)terms.pop();
+          ((Term)terms.peek()).body.add(term);
+        }
+        { /* Top-down undo semantic action: */ 
+          temp = (Term)terms.peek();
+          term = (Term)temp.body.lastElement();
+          temp.body.removeElementAt(temp.body.size()-1);
+          terms.push(term);
+        }
+        | Term _OP
+        { /* Bottom-up reduction semantic action: */
+          term = (Term)terms.pop();
+          terms.push(new Term($2.svalue(),new Vector()));
+          ((Term)terms.peek()).body.add(term);
+        }
+        { /* Top-down undo semantic action: */
+          temp = (Term)terms.pop();
+          term = (Term)temp.body.lastElement();
+          terms.push(term);
+        }
+        | '(' Term ')'
+        ;
+
+Body
+        : Term
+        { /* Bottom-up reduction semantic action: */
+          term = (Term)terms.pop();
+          ((Term)terms.peek()).body.add(term);
+        }
+        { /* Top-down undo semantic action: */ 
+          temp = (Term)terms.peek();
+          term = (Term)temp.body.lastElement();
+          temp.body.removeElementAt(temp.body.size()-1);
+          terms.push(term);
+        }
+        | Body ',' Term
+        { /* Bottom-up reduction semantic action: */
+          term = (Term)terms.pop();
+          ((Term)terms.peek()).body.add(term);
+        }
+        { /* Top-down undo semantic action: */ 
+          temp = (Term)terms.peek();
+          term = (Term)temp.body.lastElement();
+          temp.body.removeElementAt(temp.body.size()-1);
+          terms.push(term);
+        }
+        ;
+
+%%
+/**
+ * Ancillary classes
+ */
+
+class Term
+{
+  String functor = null;
+  Vector body = null;
+  double number = Double.NaN;
+  boolean isInteger = false;
+
+  Term (double n)
+    {
+      number = n;
+    }
+
+  Term (int n)
+    {
+      number = n;
+      isInteger = true;
+    }
+
+  Term (String functor)
+    {
+      this.functor = functor;
+    }
+
+  Term (String functor, Vector body)
+    {
+      this.functor = functor;
+      this.body = body;
+    }
+
+  public final boolean isNumber ()
+    {
+      return !Double.isNaN(number);
+    }
+
+  public final boolean hasBody ()
+    {
+      return (body != null && !body.isEmpty());
+    }
+
+  public String toString ()
+    {
+      if (isNumber())
+        return(isInteger ? String.valueOf((int)number)
+                         : String.valueOf(number));
+
+      if (!hasBody())
+        return functor;
+      
+      StringBuffer s = new StringBuffer(functor);
+
+      s.append("(");
+      for (int i=0; i<body.size(); i++)
+        {
+          s.append(body.get(i));
+          if (i<body.size()-1) s.append(",");
+        }
+      s.append(")");
+
+      return s.toString();
+    }
+}

@@ -1,0 +1,15 @@
+.KBD       { color: #AA5577; font-family: courier }
+.CODE      { color: #448899; font-family: courier }
+.TINY      { color: #AA0088; font-family: courier; font-size: x-small }
+.CENTER    { text-align: center }
+.OUTDENT   { margin-left: -2em }
+BODY       { margin-left: 2em; margin-right: 2em }
+BODY.MAIN  { background-color: #CCCCFF }
+BODY.TOC   { background-color: #FFFFCC }
+BODY.INDEX { margin-left: 1em; margin-right: 0em;
+             background-color: #CCFFFF }
+A:hover    { color: orange }
+A.SYMBOL   { color: #11AA55; text-decoration: none }
+A.INDEX    { text-decoration: none }
+DIV        { background: white; width: 100%; padding: 1em;
+             border: black }

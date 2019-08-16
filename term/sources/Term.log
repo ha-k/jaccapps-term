@@ -1,0 +1,987 @@
+*** This is Jacc: Just another compiler compiler... 
+*** Run of Mon Mar 26 09:22:17 CEST 2018
+*** Reading grammar in file ./sources/Term.grm ... 
+***	... in 14 ms
+
+RULES:
+
+[0]	$START$ --> $ROOTS$
+	precedence = 1
+[1]	$ROOTS$ --> Session
+	precedence = 1
+[2]	$ROOTS$ --> '$Session_switch$' Session
+	precedence = 1
+[3]	Op --> 'OP_'
+	precedence = 1
+[4]	Op --> '_OP_'
+	precedence = 1
+[5]	Op --> '_OP'
+	precedence = 1
+[6]	Session --> Clauses Exit
+	precedence = 1
+[7]	Session --> Exit
+	precedence = 1
+[8]	$ACTION0$ -->
+	precedence = 1
+[9]	Exit --> 'exit' $ACTION0$ '.'
+	precedence = 1
+[10]	Clauses --> Clause
+	precedence = 1
+[11]	Clauses --> Clauses Clause
+	precedence = 1
+[12]	$ACTION1$ -->
+	precedence = 1
+[13]	$ACTION2$ -->
+	precedence = 1
+[14]	Clause --> $ACTION1$ Term $ACTION2$ '.'
+	precedence = 1
+[15]	$ACTION3$ -->
+	precedence = 1
+[16]	Clause --> 'error' $ACTION3$ '.'
+	precedence = 1
+[17]	Op --> 'FUNCTOR'
+	precedence = 1
+[18]	Term --> 'NUMBER'
+	precedence = 1
+[19]	Term --> Op
+	precedence = 1
+[20]	$ACTION4$ -->
+	precedence = 1
+[21]	Term --> Op '(' $ACTION4$ Body ')'
+	precedence = 1
+[22]	$ACTION5$ -->
+	precedence = 1
+[23]	Term --> 'OP_' $ACTION5$ Term
+	precedence = 1
+[24]	$ACTION6$ -->
+	precedence = 1
+[25]	Term --> Term '_OP_' $ACTION6$ Term
+	precedence = 1
+[26]	Term --> Term '_OP'
+	precedence = 1
+[27]	Term --> '(' Term ')'
+	precedence = 1
+[28]	Body --> Term
+	precedence = 1
+[29]	Body --> Body ',' Term
+	precedence = 1
+
+*** Starting grammar analysis ... 
+***	Preprocessing the grammar ... 
+***	... in 2 ms
+
+TERMINALS:
+
+	----------	-------------	--------
+	PRECEDENCE	ASSOCIATIVITY	TERMINAL
+	----------	-------------	--------
+[0]	1		none		'$EMPTY$'
+[1]	1		none		'$E_O_I$'
+[2]	1		none		'error'
+[3]	1		none		'$Session_switch$'
+[4]	1		none		'NUMBER'
+[5]	1		none		'FUNCTOR'
+[6]	1		dynamic		'OP_'
+[7]	1		dynamic		'_OP_'
+[8]	1		dynamic		'_OP'
+[9]	1		none		'exit'
+[10]	1		none		'.'
+[11]	1		none		'('
+[12]	1		none		')'
+[13]	1		none		','
+	----------------------------------------
+
+DYNAMIC OPERATORS:
+
+	----------	---------	--------	--------
+	PRECEDENCE	SPECIFIER	OPERATOR	CATEGORY
+	----------	---------	--------	--------
+[0]	1		xfx		:-		Op
+[1]	1		fx		:-		Op
+[2]	1		xfx		-->		Op
+[3]	101		xfy		;		Op
+[4]	201		xfy		,		Op
+[5]	501		xfx		=		Op
+[6]	501		xfx		\=		Op
+[7]	501		xfx		==		Op
+[8]	501		xfx		\==		Op
+[9]	501		xfx		=..		Op
+[10]	501		xfx		is		Op
+[11]	501		xfx		=:=		Op
+[12]	501		xfx		=\=		Op
+[13]	501		xfx		<		Op
+[14]	501		xfx		<=		Op
+[15]	501		xfx		>		Op
+[16]	501		xfx		>=		Op
+[17]	701		yfx		+		Op
+[18]	701		yfx		-		Op
+[19]	801		yfx		*		Op
+[20]	801		yfx		/		Op
+[21]	1001		xfy		&		Op
+[22]	1001		xfy		^		Op
+[23]	1001		fy		-		Op
+[24]	401		fx		if		Op
+[25]	351		xfy		then		Op
+[26]	381		xfx		else		Op
+	---------------------------------------------------------
+
+NON TERMINALS:
+
+  [0]	$START$
+	FIRST:	 {'error', '$Session_switch$', 'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', 'exit', '('}
+	LSet:	 {$START$, $ROOTS$, Session, Clauses, Exit, Clause, $ACTION1$}
+
+  [1]	$ROOTS$
+	FIRST:	 {'error', '$Session_switch$', 'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', 'exit', '('}
+	LSet:	 {$ROOTS$, Session, Clauses, Exit, Clause, $ACTION1$}
+
+  [2]	Session
+	FIRST:	 {'error', 'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', 'exit', '('}
+	LSet:	 {Session, Clauses, Exit, Clause, $ACTION1$}
+
+  [3]	Op
+	FIRST:	 {'FUNCTOR', 'OP_', '_OP_', '_OP'}
+	LSet:	 {Op}
+
+  [4]	Clauses
+	FIRST:	 {'error', 'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+	LSet:	 {Clauses, Clause, $ACTION1$}
+
+  [5]	Exit
+	FIRST:	 {'exit'}
+	LSet:	 {Exit}
+
+  [6]	$ACTION0$	(nullable)
+	FIRST:	 {}
+	LSet:	 {$ACTION0$}
+
+  [7]	Clause
+	FIRST:	 {'error', 'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+	LSet:	 {Clause, $ACTION1$}
+
+  [8]	Term
+	FIRST:	 {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+	LSet:	 {Op, Term}
+
+  [9]	$ACTION1$	(nullable)
+	FIRST:	 {}
+	LSet:	 {$ACTION1$}
+
+  [10]	$ACTION2$	(nullable)
+	FIRST:	 {}
+	LSet:	 {$ACTION2$}
+
+  [11]	$ACTION3$	(nullable)
+	FIRST:	 {}
+	LSet:	 {$ACTION3$}
+
+  [12]	Body
+	FIRST:	 {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+	LSet:	 {Op, Term, Body}
+
+  [13]	$ACTION4$	(nullable)
+	FIRST:	 {}
+	LSet:	 {$ACTION4$}
+
+  [14]	$ACTION5$	(nullable)
+	FIRST:	 {}
+	LSet:	 {$ACTION5$}
+
+  [15]	$ACTION6$	(nullable)
+	FIRST:	 {}
+	LSet:	 {$ACTION6$}
+
+
+***	Building canonical LR states ... 
+***	 ... in 5 ms
+***	Propagating lookahead symbols ... 
+***	 ... in 1 ms
+*** Grammar analysis completed in 10 ms.
+*** Building parsing tables ... 
+***	... in 1 ms
+
+
+
+=============================
+STATE NUMBER: 0
+=============================
+[0] $START$ --> . $ROOTS$
+	Preceding states: {0}
+	Follow set: {'$E_O_I$'}
+	Preceding states: {0}
+[1] $ROOTS$ --> . Session
+	Preceding states: {0}
+[2] $ROOTS$ --> . '$Session_switch$' Session
+	Preceding states: {0}
+[6] Session --> . Clauses Exit
+	Preceding states: {0}
+[7] Session --> . Exit
+	Preceding states: {0}
+[9] Exit --> . 'exit' $ACTION0$ '.'
+	Preceding states: {0}
+[10] Clauses --> . Clause
+	Preceding states: {0}
+[11] Clauses --> . Clauses Clause
+	Preceding states: {0}
+[12] $ACTION1$ --> .
+	Preceding states: {0}
+	Lookahead set: {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+[14] Clause --> . $ACTION1$ Term $ACTION2$ '.'
+	Preceding states: {0}
+[16] Clause --> . 'error' $ACTION3$ '.'
+	Preceding states: {0}
+-----------------------------
+With $ROOTS$, go to state 1
+With Session, go to state 2
+With '$Session_switch$', go to state 3
+With Clauses, go to state 4
+With Exit, go to state 5
+With Clause, go to state 6
+With 'exit', go to state 7
+With $ACTION1$, go to state 8
+With 'error', go to state 9
+
+=============================
+STATE NUMBER: 1
+=============================
+[0] $START$ --> $ROOTS$ .
+	Preceding states: {0}
+	Lookahead set: {}
+-----------------------------
+
+=============================
+STATE NUMBER: 2
+=============================
+[1] $ROOTS$ --> Session .
+	Preceding states: {0}
+	Lookahead set: {'$E_O_I$'}
+-----------------------------
+
+=============================
+STATE NUMBER: 3
+=============================
+[2] $ROOTS$ --> '$Session_switch$' . Session
+	Preceding states: {0}
+	Follow set: {'$E_O_I$'}
+[6] Session --> . Clauses Exit
+	Preceding states: {3}
+[7] Session --> . Exit
+	Preceding states: {3}
+[9] Exit --> . 'exit' $ACTION0$ '.'
+	Preceding states: {3}
+[10] Clauses --> . Clause
+	Preceding states: {3}
+[11] Clauses --> . Clauses Clause
+	Preceding states: {3}
+[12] $ACTION1$ --> .
+	Preceding states: {3}
+	Lookahead set: {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+[14] Clause --> . $ACTION1$ Term $ACTION2$ '.'
+	Preceding states: {3}
+[16] Clause --> . 'error' $ACTION3$ '.'
+	Preceding states: {3}
+-----------------------------
+With Session, go to state 41
+With Clauses, go to state 4
+With Exit, go to state 5
+With Clause, go to state 6
+With 'exit', go to state 7
+With $ACTION1$, go to state 8
+With 'error', go to state 9
+
+=============================
+STATE NUMBER: 4
+=============================
+[6] Session --> Clauses . Exit
+	Preceding states: {0, 3}
+	Follow set: {'$E_O_I$'}
+[9] Exit --> . 'exit' $ACTION0$ '.'
+	Preceding states: {4}
+[11] Clauses --> Clauses . Clause
+	Preceding states: {0, 3}
+	Follow set: {'error', 'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', 'exit', '('}
+[12] $ACTION1$ --> .
+	Preceding states: {4}
+	Lookahead set: {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+[14] Clause --> . $ACTION1$ Term $ACTION2$ '.'
+	Preceding states: {4}
+[16] Clause --> . 'error' $ACTION3$ '.'
+	Preceding states: {4}
+-----------------------------
+With Exit, go to state 39
+With Clause, go to state 40
+With 'exit', go to state 7
+With $ACTION1$, go to state 8
+With 'error', go to state 9
+
+=============================
+STATE NUMBER: 5
+=============================
+[7] Session --> Exit .
+	Preceding states: {0, 3}
+	Lookahead set: {'$E_O_I$'}
+-----------------------------
+
+=============================
+STATE NUMBER: 6
+=============================
+[10] Clauses --> Clause .
+	Preceding states: {0, 3}
+	Lookahead set: {'error', 'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', 'exit', '('}
+-----------------------------
+
+=============================
+STATE NUMBER: 7
+=============================
+[8] $ACTION0$ --> .
+	Preceding states: {7}
+	Lookahead set: {'.'}
+[9] Exit --> 'exit' . $ACTION0$ '.'
+	Preceding states: {0, 3, 4}
+	Follow set: {'.'}
+-----------------------------
+With $ACTION0$, go to state 37
+
+=============================
+STATE NUMBER: 8
+=============================
+[3] Op --> . 'OP_'
+	Preceding states: {8}
+[4] Op --> . '_OP_'
+	Preceding states: {8}
+[5] Op --> . '_OP'
+	Preceding states: {8}
+[14] Clause --> $ACTION1$ . Term $ACTION2$ '.'
+	Preceding states: {0, 3, 4}
+	Follow set: {'.'}
+[17] Op --> . 'FUNCTOR'
+	Preceding states: {8}
+[18] Term --> . 'NUMBER'
+	Preceding states: {8}
+[19] Term --> . Op
+	Preceding states: {8}
+[21] Term --> . Op '(' $ACTION4$ Body ')'
+	Preceding states: {8}
+[23] Term --> . 'OP_' $ACTION5$ Term
+	Preceding states: {8}
+[25] Term --> . Term '_OP_' $ACTION6$ Term
+	Preceding states: {8}
+[26] Term --> . Term '_OP'
+	Preceding states: {8}
+[27] Term --> . '(' Term ')'
+	Preceding states: {8}
+-----------------------------
+With Term, go to state 12
+With 'OP_', go to state 13
+With '_OP_', go to state 14
+With '_OP', go to state 15
+With 'FUNCTOR', go to state 16
+With 'NUMBER', go to state 17
+With Op, go to state 18
+With '(', go to state 19
+
+=============================
+STATE NUMBER: 9
+=============================
+[15] $ACTION3$ --> .
+	Preceding states: {9}
+	Lookahead set: {'.'}
+[16] Clause --> 'error' . $ACTION3$ '.'
+	Preceding states: {0, 3, 4}
+	Follow set: {'.'}
+-----------------------------
+With $ACTION3$, go to state 10
+
+=============================
+STATE NUMBER: 10
+=============================
+[16] Clause --> 'error' $ACTION3$ . '.'
+	Preceding states: {0, 3, 4}
+-----------------------------
+With '.', go to state 11
+
+=============================
+STATE NUMBER: 11
+=============================
+[16] Clause --> 'error' $ACTION3$ '.' .
+	Preceding states: {0, 3, 4}
+	Lookahead set: {'error', 'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', 'exit', '('}
+-----------------------------
+
+=============================
+STATE NUMBER: 12
+=============================
+[13] $ACTION2$ --> .
+	Preceding states: {12}
+	Lookahead set: {'.'}
+[14] Clause --> $ACTION1$ Term . $ACTION2$ '.'
+	Preceding states: {0, 3, 4}
+	Follow set: {'.'}
+[25] Term --> Term . '_OP_' $ACTION6$ Term
+	Preceding states: {8}
+[26] Term --> Term . '_OP'
+	Preceding states: {8}
+-----------------------------
+With $ACTION2$, go to state 35
+With '_OP_', go to state 21
+With '_OP', go to state 22
+
+=============================
+STATE NUMBER: 13
+=============================
+This state has dynamic actions:
+	
+{0:[R3, R22]}
+-----------------------------
+[3] Op --> 'OP_' .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', '(', ')', ','}
+[22] $ACTION5$ --> .
+	Preceding states: {13}
+	Lookahead set: {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+[23] Term --> 'OP_' . $ACTION5$ Term
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Follow set: {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+-----------------------------
+With $ACTION5$, go to state 33
+
+=============================
+STATE NUMBER: 14
+=============================
+[4] Op --> '_OP_' .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', '(', ')', ','}
+-----------------------------
+
+=============================
+STATE NUMBER: 15
+=============================
+[5] Op --> '_OP' .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', '(', ')', ','}
+-----------------------------
+
+=============================
+STATE NUMBER: 16
+=============================
+[17] Op --> 'FUNCTOR' .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', '(', ')', ','}
+-----------------------------
+
+=============================
+STATE NUMBER: 17
+=============================
+[18] Term --> 'NUMBER' .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', ')', ','}
+-----------------------------
+
+=============================
+STATE NUMBER: 18
+=============================
+[19] Term --> Op .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', ')', ','}
+[21] Term --> Op . '(' $ACTION4$ Body ')'
+	Preceding states: {8, 19, 24, 27, 31, 33}
+-----------------------------
+With '(', go to state 26
+
+=============================
+STATE NUMBER: 19
+=============================
+[3] Op --> . 'OP_'
+	Preceding states: {19}
+[4] Op --> . '_OP_'
+	Preceding states: {19}
+[5] Op --> . '_OP'
+	Preceding states: {19}
+[17] Op --> . 'FUNCTOR'
+	Preceding states: {19}
+[18] Term --> . 'NUMBER'
+	Preceding states: {19}
+[19] Term --> . Op
+	Preceding states: {19}
+[21] Term --> . Op '(' $ACTION4$ Body ')'
+	Preceding states: {19}
+[23] Term --> . 'OP_' $ACTION5$ Term
+	Preceding states: {19}
+[25] Term --> . Term '_OP_' $ACTION6$ Term
+	Preceding states: {19}
+[26] Term --> . Term '_OP'
+	Preceding states: {19}
+[27] Term --> . '(' Term ')'
+	Preceding states: {19}
+[27] Term --> '(' . Term ')'
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Follow set: {')'}
+-----------------------------
+With Term, go to state 20
+With 'OP_', go to state 13
+With '_OP_', go to state 14
+With '_OP', go to state 15
+With 'FUNCTOR', go to state 16
+With 'NUMBER', go to state 17
+With Op, go to state 18
+With '(', go to state 19
+
+=============================
+STATE NUMBER: 20
+=============================
+[25] Term --> Term . '_OP_' $ACTION6$ Term
+	Preceding states: {19}
+[26] Term --> Term . '_OP'
+	Preceding states: {19}
+[27] Term --> '(' Term . ')'
+	Preceding states: {8, 19, 24, 27, 31, 33}
+-----------------------------
+With '_OP_', go to state 21
+With '_OP', go to state 22
+With ')', go to state 23
+
+=============================
+STATE NUMBER: 21
+=============================
+[24] $ACTION6$ --> .
+	Preceding states: {21}
+	Lookahead set: {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+[25] Term --> Term '_OP_' . $ACTION6$ Term
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Follow set: {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+-----------------------------
+With $ACTION6$, go to state 24
+
+=============================
+STATE NUMBER: 22
+=============================
+[26] Term --> Term '_OP' .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', ')', ','}
+-----------------------------
+
+=============================
+STATE NUMBER: 23
+=============================
+[27] Term --> '(' Term ')' .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', ')', ','}
+-----------------------------
+
+=============================
+STATE NUMBER: 24
+=============================
+[3] Op --> . 'OP_'
+	Preceding states: {24}
+[4] Op --> . '_OP_'
+	Preceding states: {24}
+[5] Op --> . '_OP'
+	Preceding states: {24}
+[17] Op --> . 'FUNCTOR'
+	Preceding states: {24}
+[18] Term --> . 'NUMBER'
+	Preceding states: {24}
+[19] Term --> . Op
+	Preceding states: {24}
+[21] Term --> . Op '(' $ACTION4$ Body ')'
+	Preceding states: {24}
+[23] Term --> . 'OP_' $ACTION5$ Term
+	Preceding states: {24}
+[25] Term --> . Term '_OP_' $ACTION6$ Term
+	Preceding states: {24}
+[25] Term --> Term '_OP_' $ACTION6$ . Term
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Follow set: {'_OP_', '_OP', '.', ')', ','}
+[26] Term --> . Term '_OP'
+	Preceding states: {24}
+[27] Term --> . '(' Term ')'
+	Preceding states: {24}
+-----------------------------
+With Term, go to state 25
+With 'OP_', go to state 13
+With '_OP_', go to state 14
+With '_OP', go to state 15
+With 'FUNCTOR', go to state 16
+With 'NUMBER', go to state 17
+With Op, go to state 18
+With '(', go to state 19
+
+=============================
+STATE NUMBER: 25
+=============================
+This state has dynamic actions:
+	
+{0:[S21, R25],1:[R25, S22]}
+-----------------------------
+[25] Term --> Term . '_OP_' $ACTION6$ Term
+	Preceding states: {24}
+[25] Term --> Term '_OP_' $ACTION6$ Term .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', ')', ','}
+[26] Term --> Term . '_OP'
+	Preceding states: {24}
+-----------------------------
+With '_OP_', go to state 21
+With '_OP', go to state 22
+
+=============================
+STATE NUMBER: 26
+=============================
+[20] $ACTION4$ --> .
+	Preceding states: {26}
+	Lookahead set: {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+[21] Term --> Op '(' . $ACTION4$ Body ')'
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Follow set: {'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', '('}
+-----------------------------
+With $ACTION4$, go to state 27
+
+=============================
+STATE NUMBER: 27
+=============================
+[3] Op --> . 'OP_'
+	Preceding states: {27}
+[4] Op --> . '_OP_'
+	Preceding states: {27}
+[5] Op --> . '_OP'
+	Preceding states: {27}
+[17] Op --> . 'FUNCTOR'
+	Preceding states: {27}
+[18] Term --> . 'NUMBER'
+	Preceding states: {27}
+[19] Term --> . Op
+	Preceding states: {27}
+[21] Term --> . Op '(' $ACTION4$ Body ')'
+	Preceding states: {27}
+[21] Term --> Op '(' $ACTION4$ . Body ')'
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Follow set: {')'}
+[23] Term --> . 'OP_' $ACTION5$ Term
+	Preceding states: {27}
+[25] Term --> . Term '_OP_' $ACTION6$ Term
+	Preceding states: {27}
+[26] Term --> . Term '_OP'
+	Preceding states: {27}
+[27] Term --> . '(' Term ')'
+	Preceding states: {27}
+[28] Body --> . Term
+	Preceding states: {27}
+[29] Body --> . Body ',' Term
+	Preceding states: {27}
+-----------------------------
+With Body, go to state 28
+With 'OP_', go to state 13
+With '_OP_', go to state 14
+With '_OP', go to state 15
+With 'FUNCTOR', go to state 16
+With 'NUMBER', go to state 17
+With Op, go to state 18
+With Term, go to state 29
+With '(', go to state 19
+
+=============================
+STATE NUMBER: 28
+=============================
+[21] Term --> Op '(' $ACTION4$ Body . ')'
+	Preceding states: {8, 19, 24, 27, 31, 33}
+[29] Body --> Body . ',' Term
+	Preceding states: {27}
+-----------------------------
+With ')', go to state 30
+With ',', go to state 31
+
+=============================
+STATE NUMBER: 29
+=============================
+[25] Term --> Term . '_OP_' $ACTION6$ Term
+	Preceding states: {27}
+[26] Term --> Term . '_OP'
+	Preceding states: {27}
+[28] Body --> Term .
+	Preceding states: {27}
+	Lookahead set: {')', ','}
+-----------------------------
+With '_OP_', go to state 21
+With '_OP', go to state 22
+
+=============================
+STATE NUMBER: 30
+=============================
+[21] Term --> Op '(' $ACTION4$ Body ')' .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', ')', ','}
+-----------------------------
+
+=============================
+STATE NUMBER: 31
+=============================
+[3] Op --> . 'OP_'
+	Preceding states: {31}
+[4] Op --> . '_OP_'
+	Preceding states: {31}
+[5] Op --> . '_OP'
+	Preceding states: {31}
+[17] Op --> . 'FUNCTOR'
+	Preceding states: {31}
+[18] Term --> . 'NUMBER'
+	Preceding states: {31}
+[19] Term --> . Op
+	Preceding states: {31}
+[21] Term --> . Op '(' $ACTION4$ Body ')'
+	Preceding states: {31}
+[23] Term --> . 'OP_' $ACTION5$ Term
+	Preceding states: {31}
+[25] Term --> . Term '_OP_' $ACTION6$ Term
+	Preceding states: {31}
+[26] Term --> . Term '_OP'
+	Preceding states: {31}
+[27] Term --> . '(' Term ')'
+	Preceding states: {31}
+[29] Body --> Body ',' . Term
+	Preceding states: {27}
+	Follow set: {')', ','}
+-----------------------------
+With Term, go to state 32
+With 'OP_', go to state 13
+With '_OP_', go to state 14
+With '_OP', go to state 15
+With 'FUNCTOR', go to state 16
+With 'NUMBER', go to state 17
+With Op, go to state 18
+With '(', go to state 19
+
+=============================
+STATE NUMBER: 32
+=============================
+[25] Term --> Term . '_OP_' $ACTION6$ Term
+	Preceding states: {31}
+[26] Term --> Term . '_OP'
+	Preceding states: {31}
+[29] Body --> Body ',' Term .
+	Preceding states: {27}
+	Lookahead set: {')', ','}
+-----------------------------
+With '_OP_', go to state 21
+With '_OP', go to state 22
+
+=============================
+STATE NUMBER: 33
+=============================
+[3] Op --> . 'OP_'
+	Preceding states: {33}
+[4] Op --> . '_OP_'
+	Preceding states: {33}
+[5] Op --> . '_OP'
+	Preceding states: {33}
+[17] Op --> . 'FUNCTOR'
+	Preceding states: {33}
+[18] Term --> . 'NUMBER'
+	Preceding states: {33}
+[19] Term --> . Op
+	Preceding states: {33}
+[21] Term --> . Op '(' $ACTION4$ Body ')'
+	Preceding states: {33}
+[23] Term --> . 'OP_' $ACTION5$ Term
+	Preceding states: {33}
+[23] Term --> 'OP_' $ACTION5$ . Term
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Follow set: {'_OP_', '_OP', '.', ')', ','}
+[25] Term --> . Term '_OP_' $ACTION6$ Term
+	Preceding states: {33}
+[26] Term --> . Term '_OP'
+	Preceding states: {33}
+[27] Term --> . '(' Term ')'
+	Preceding states: {33}
+-----------------------------
+With Term, go to state 34
+With 'OP_', go to state 13
+With '_OP_', go to state 14
+With '_OP', go to state 15
+With 'FUNCTOR', go to state 16
+With 'NUMBER', go to state 17
+With Op, go to state 18
+With '(', go to state 19
+
+=============================
+STATE NUMBER: 34
+=============================
+This state has dynamic actions:
+	
+{0:[R23, S21],1:[R23, S22]}
+-----------------------------
+[23] Term --> 'OP_' $ACTION5$ Term .
+	Preceding states: {8, 19, 24, 27, 31, 33}
+	Lookahead set: {'_OP_', '_OP', '.', ')', ','}
+[25] Term --> Term . '_OP_' $ACTION6$ Term
+	Preceding states: {33}
+[26] Term --> Term . '_OP'
+	Preceding states: {33}
+-----------------------------
+With '_OP_', go to state 21
+With '_OP', go to state 22
+
+=============================
+STATE NUMBER: 35
+=============================
+[14] Clause --> $ACTION1$ Term $ACTION2$ . '.'
+	Preceding states: {0, 3, 4}
+-----------------------------
+With '.', go to state 36
+
+=============================
+STATE NUMBER: 36
+=============================
+[14] Clause --> $ACTION1$ Term $ACTION2$ '.' .
+	Preceding states: {0, 3, 4}
+	Lookahead set: {'error', 'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', 'exit', '('}
+-----------------------------
+
+=============================
+STATE NUMBER: 37
+=============================
+[9] Exit --> 'exit' $ACTION0$ . '.'
+	Preceding states: {0, 3, 4}
+-----------------------------
+With '.', go to state 38
+
+=============================
+STATE NUMBER: 38
+=============================
+[9] Exit --> 'exit' $ACTION0$ '.' .
+	Preceding states: {0, 3, 4}
+	Lookahead set: {'$E_O_I$'}
+-----------------------------
+
+=============================
+STATE NUMBER: 39
+=============================
+[6] Session --> Clauses Exit .
+	Preceding states: {0, 3}
+	Lookahead set: {'$E_O_I$'}
+-----------------------------
+
+=============================
+STATE NUMBER: 40
+=============================
+[11] Clauses --> Clauses Clause .
+	Preceding states: {0, 3}
+	Lookahead set: {'error', 'NUMBER', 'FUNCTOR', 'OP_', '_OP_', '_OP', 'exit', '('}
+-----------------------------
+
+=============================
+STATE NUMBER: 41
+=============================
+[2] $ROOTS$ --> '$Session_switch$' Session .
+	Preceding states: {0}
+	Lookahead set: {'$E_O_I$'}
+-----------------------------
+*** Compressing parsing tables ... 
+***	6 rows eliminated in action table
+***	26 rows eliminated in goto table
+*** Table compression completed in 1 ms
+
+
+ACTION TABLE:
+
+	[1]	[2]	[3]	[4]	[5]	[6]	[7]	[8]	[9]	[10]	[11]	[12]	[13]
+	________________________________________________________________________________________________________
+[0]	 - 	 S9	 S3	 R12	 R12	 R12	 R12	 R12	 S7	 - 	 R12	 - 	 - 
+[1]	 A	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[2]	 R1	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[3]	 - 	 S9	 - 	 R12	 R12	 R12	 R12	 R12	 S7	 - 	 R12	 - 	 - 
+[4]	 - 	 S9	 - 	 R12	 R12	 R12	 R12	 R12	 S7	 - 	 R12	 - 	 - 
+[5]	 R7	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[6]	 - 	 R10	 - 	 R10	 R10	 R10	 R10	 R10	 R10	 - 	 R10	 - 	 - 
+[7]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 R8	 - 	 - 	 - 
+[8]	 - 	 - 	 - 	 S17	 S16	 S13	 S14	 S15	 - 	 - 	 S19	 - 	 - 
+[9]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 R15	 - 	 - 	 - 
+[10]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 S11	 - 	 - 	 - 
+[11]	 - 	 R16	 - 	 R16	 R16	 R16	 R16	 R16	 R16	 - 	 R16	 - 	 - 
+[12]	 - 	 - 	 - 	 - 	 - 	 - 	 S21	 S22	 - 	 R13	 - 	 - 	 - 
+[13]	 - 	 - 	 - 	 R22	 R22	 R22	 D0	 D0	 - 	 R3	 D0	 R3	 R3
+[14]	 - 	 - 	 - 	 - 	 - 	 - 	 R4	 R4	 - 	 R4	 R4	 R4	 R4
+[15]	 - 	 - 	 - 	 - 	 - 	 - 	 R5	 R5	 - 	 R5	 R5	 R5	 R5
+[16]	 - 	 - 	 - 	 - 	 - 	 - 	 R17	 R17	 - 	 R17	 R17	 R17	 R17
+[17]	 - 	 - 	 - 	 - 	 - 	 - 	 R18	 R18	 - 	 R18	 - 	 R18	 R18
+[18]	 - 	 - 	 - 	 - 	 - 	 - 	 R19	 R19	 - 	 R19	 S26	 R19	 R19
+[19]	 - 	 - 	 - 	 S17	 S16	 S13	 S14	 S15	 - 	 - 	 S19	 - 	 - 
+[20]	 - 	 - 	 - 	 - 	 - 	 - 	 S21	 S22	 - 	 - 	 - 	 S23	 - 
+[21]	 - 	 - 	 - 	 R24	 R24	 R24	 R24	 R24	 - 	 - 	 R24	 - 	 - 
+[22]	 - 	 - 	 - 	 - 	 - 	 - 	 R26	 R26	 - 	 R26	 - 	 R26	 R26
+[23]	 - 	 - 	 - 	 - 	 - 	 - 	 R27	 R27	 - 	 R27	 - 	 R27	 R27
+[24]	 - 	 - 	 - 	 S17	 S16	 S13	 S14	 S15	 - 	 - 	 S19	 - 	 - 
+[25]	 - 	 - 	 - 	 - 	 - 	 - 	 D0	 D1	 - 	 R25	 - 	 R25	 R25
+[26]	 - 	 - 	 - 	 R20	 R20	 R20	 R20	 R20	 - 	 - 	 R20	 - 	 - 
+[27]	 - 	 - 	 - 	 S17	 S16	 S13	 S14	 S15	 - 	 - 	 S19	 - 	 - 
+[28]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 S30	 S31
+[29]	 - 	 - 	 - 	 - 	 - 	 - 	 S21	 S22	 - 	 - 	 - 	 R28	 R28
+[30]	 - 	 - 	 - 	 - 	 - 	 - 	 R21	 R21	 - 	 R21	 - 	 R21	 R21
+[31]	 - 	 - 	 - 	 S17	 S16	 S13	 S14	 S15	 - 	 - 	 S19	 - 	 - 
+[32]	 - 	 - 	 - 	 - 	 - 	 - 	 S21	 S22	 - 	 - 	 - 	 R29	 R29
+[33]	 - 	 - 	 - 	 S17	 S16	 S13	 S14	 S15	 - 	 - 	 S19	 - 	 - 
+[34]	 - 	 - 	 - 	 - 	 - 	 - 	 D0	 D1	 - 	 R23	 - 	 R23	 R23
+[35]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 S36	 - 	 - 	 - 
+[36]	 - 	 R14	 - 	 R14	 R14	 R14	 R14	 R14	 R14	 - 	 R14	 - 	 - 
+[37]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 S38	 - 	 - 	 - 
+[38]	 R9	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[39]	 R6	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[40]	 - 	 R11	 - 	 R11	 R11	 R11	 R11	 R11	 R11	 - 	 R11	 - 	 - 
+[41]	 R2	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+
+
+DYNAMIC ACTIONS:
+
+[13]	D0 -> { R3, R22 }
+[25]	D0 -> { S21, R25 }
+	D1 -> { R25, S22 }
+[34]	D0 -> { R23, S21 }
+	D1 -> { R23, S22 }
+
+
+GOTO TABLE:
+
+	[1]	[2]	[3]	[4]	[5]	[6]	[7]	[8]	[9]	[10]	[11]	[12]	[13]	[14]	[15]
+	________________________________________________________________________________________________________________
+[0]	 1 	 2 	 - 	 4 	 5 	 - 	 6 	 - 	 8 	 - 	 - 	 - 	 - 	 - 	 - 
+[1]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[2]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[3]	 - 	 41 	 - 	 4 	 5 	 - 	 6 	 - 	 8 	 - 	 - 	 - 	 - 	 - 	 - 
+[4]	 - 	 - 	 - 	 - 	 39 	 - 	 40 	 - 	 8 	 - 	 - 	 - 	 - 	 - 	 - 
+[5]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[6]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[7]	 - 	 - 	 - 	 - 	 - 	 37 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[8]	 - 	 - 	 18 	 - 	 - 	 - 	 - 	 12 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[9]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 10 	 - 	 - 	 - 	 - 
+[10]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[11]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[12]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 35 	 - 	 - 	 - 	 - 	 - 
+[13]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 33 	 - 
+[14]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[15]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[16]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[17]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[18]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[19]	 - 	 - 	 18 	 - 	 - 	 - 	 - 	 20 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[20]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[21]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 24 
+[22]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[23]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[24]	 - 	 - 	 18 	 - 	 - 	 - 	 - 	 25 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[25]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[26]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 27 	 - 	 - 
+[27]	 - 	 - 	 18 	 - 	 - 	 - 	 - 	 29 	 - 	 - 	 - 	 28 	 - 	 - 	 - 
+[28]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[29]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[30]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[31]	 - 	 - 	 18 	 - 	 - 	 - 	 - 	 32 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[32]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[33]	 - 	 - 	 18 	 - 	 - 	 - 	 - 	 34 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[34]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[35]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[36]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[37]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[38]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[39]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[40]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+[41]	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 	 - 
+

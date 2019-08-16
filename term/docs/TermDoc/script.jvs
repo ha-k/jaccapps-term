@@ -1,0 +1,4 @@
+function showRuleDoc (ref)
+  {
+    window.open(ref+".html",ref,"width=800,height=800,resizable,scrollbars=no,status=no,directories=no,hotkeys=no,menubar=no").focus();
+  }

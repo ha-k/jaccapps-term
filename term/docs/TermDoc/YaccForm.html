@@ -1,0 +1,72 @@
+<HTML>
+<HEAD>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="style.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="script.jvs"></SCRIPT>
+<TITLE>
+Yacc Form of grammar Term.grm
+</TITLE>
+</HEAD>
+<BODY CLASS="MAIN"  LINK="BLUE" VLINK="BLUE" ALINK="PURPLE">
+<H1 ALIGN="CENTER">Yacc Form of grammar <SPAN STYLE="COLOR:MAROON">Term.grm</SPAN></H1>
+<CENTER>
+<HR>
+<SPAN STYLE="COLOR:#F07070; FONT-SIZE:X-SMALL"><B>Copyright &copy; 2018 by <A HREF="http://www.hassan-ait-kaci.net/">Hassan A&iuml;t-Kaci</A>; All Rights Reserved.</B></SPAN>
+<P>
+<SPAN STYLE="COLOR:#F00770; FONT-SIZE:XX-SMALL"">
+This yacc grammar was generated on Sun Jun 10 19:47:49 CEST 2018 from the annotated Jacc grammar file <SPAN STYLE="COLOR:BROWN"><TT>Term.grm</TT></SPAN>.
+<HR><P>
+<TABLE BGCOLOR="WHITE" BORDER="5" CELLPADDING="20">
+<TR><TD>
+<PRE>
+<A CLASS="SYMBOL" NAME="Session"></A><A CLASS="SYMBOL" HREF="Term_NT_02.html" TARGET="MAIN" ONCLICK="opener.focus()"><B><TT><I>Session</I></TT></B></A>
+	: <A CLASS="SYMBOL" HREF="#Clauses">Clauses</A> <A CLASS="SYMBOL" HREF="#Exit">Exit</A> 
+	| <A CLASS="SYMBOL" HREF="#Exit">Exit</A> 
+	;
+
+<A CLASS="SYMBOL" NAME="Exit"></A><A CLASS="SYMBOL" HREF="Term_NT_05.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><I>Exit</I></TT></A>
+	: '<A CLASS="SYMBOL" HREF="Term_TT_09.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>exit</B></TT></A>' '<A CLASS="SYMBOL" HREF="Term_TT_10.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>.</B></TT></A>' 
+	;
+
+<A CLASS="SYMBOL" NAME="Clauses"></A><A CLASS="SYMBOL" HREF="Term_NT_04.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><I>Clauses</I></TT></A>
+	: <A CLASS="SYMBOL" HREF="#Clause">Clause</A> 
+	| <A CLASS="SYMBOL" HREF="#Clauses">Clauses</A> <A CLASS="SYMBOL" HREF="#Clause">Clause</A> 
+	;
+
+<A CLASS="SYMBOL" NAME="Clause"></A><A CLASS="SYMBOL" HREF="Term_NT_07.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><I>Clause</I></TT></A>
+	: <A CLASS="SYMBOL" HREF="#Term">Term</A> '<A CLASS="SYMBOL" HREF="Term_TT_10.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>.</B></TT></A>' 
+	| <B><SPAN STYLE="COLOR:#4444FF">error</SPAN></B> '<A CLASS="SYMBOL" HREF="Term_TT_10.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>.</B></TT></A>' 
+	;
+
+<A CLASS="SYMBOL" NAME="Term"></A><A CLASS="SYMBOL" HREF="Term_NT_08.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><I>Term</I></TT></A>
+	: <A CLASS="SYMBOL" HREF="Term_TT_04.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>NUMBER</B></TT></A> 
+	| <A CLASS="SYMBOL" HREF="#Op">Op</A> 
+	| <A CLASS="SYMBOL" HREF="#Op">Op</A> '<A CLASS="SYMBOL" HREF="Term_TT_11.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>(</B></TT></A>' <A CLASS="SYMBOL" HREF="#Body">Body</A> '<A CLASS="SYMBOL" HREF="Term_TT_12.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>)</B></TT></A>' 
+	| <A CLASS="SYMBOL" HREF="Term_TT_06.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>OP_</B></TT></A> <A CLASS="SYMBOL" HREF="#Term">Term</A> 
+	| <A CLASS="SYMBOL" HREF="#Term">Term</A> <A CLASS="SYMBOL" HREF="Term_TT_07.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>_OP_</B></TT></A> <A CLASS="SYMBOL" HREF="#Term">Term</A> 
+	| <A CLASS="SYMBOL" HREF="#Term">Term</A> <A CLASS="SYMBOL" HREF="Term_TT_08.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>_OP</B></TT></A> 
+	| '<A CLASS="SYMBOL" HREF="Term_TT_11.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>(</B></TT></A>' <A CLASS="SYMBOL" HREF="#Term">Term</A> '<A CLASS="SYMBOL" HREF="Term_TT_12.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>)</B></TT></A>' 
+	;
+
+<A CLASS="SYMBOL" NAME="Body"></A><A CLASS="SYMBOL" HREF="Term_NT_12.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><I>Body</I></TT></A>
+	: <A CLASS="SYMBOL" HREF="#Term">Term</A> 
+	| <A CLASS="SYMBOL" HREF="#Body">Body</A> '<A CLASS="SYMBOL" HREF="Term_TT_13.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>,</B></TT></A>' <A CLASS="SYMBOL" HREF="#Term">Term</A> 
+	;
+
+<A CLASS="SYMBOL" NAME="Op"></A><A CLASS="SYMBOL" HREF="Term_NT_03.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><I>Op</I></TT></A>
+	: <A CLASS="SYMBOL" HREF="Term_TT_06.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>OP_</B></TT></A> 
+	| <A CLASS="SYMBOL" HREF="Term_TT_07.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>_OP_</B></TT></A> 
+	| <A CLASS="SYMBOL" HREF="Term_TT_08.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>_OP</B></TT></A> 
+	| <A CLASS="SYMBOL" HREF="Term_TT_05.html" TARGET="MAIN" ONCLICK="opener.focus()"><TT><B>FUNCTOR</B></TT></A> 
+	;
+
+</PRE>
+</TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<HR>
+<SPAN STYLE="COLOR:#F07070; FONT-SIZE:XX-SMALL">
+<P ALIGN="RIGHT"><B>Copyright &copy; 2018 by <A HREF="http://www.hassan-ait-kaci.net/">Hassan A&iuml;t-Kaci</A>; All Rights Reserved.</B></SPAN>
+<P ALIGN="RIGHT"><IMG ALIGN="MIDDLE" SRC="images/hlt/hlt-logo.gif" WIDTH="90" HEIGHT="90">
+</BODY>
+</HTML>
